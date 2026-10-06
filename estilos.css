@@ -1,0 +1,448 @@
+/* 1. CONFIGURACIÓN GENERAL Y TIPOGRAFÍA */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7f6; /* Gris muy claro, cómodo para la vista */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ocupa el 100% de la altura de la pantalla */
+}
+
+/* 2. ENCABEZADO SUPERIOR */
+#encabezado-app {
+  background-color: #2c3e50; /* Azul oscuro elegante */
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#encabezado-app h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+/* 3. PANEL DE CONTROL Y BOTONERA TÁCTIL */
+#panel-control {
+  background-color: #ffffff;
+  padding: 12px 20px;
+  display: flex;
+  gap: 20px;
+  border-bottom: 2px solid #e2e8f0;
+  justify-content: center;
+}
+
+.grupo-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Estilo de botones táctiles tácticos */
+button {
+  background-color: #edf2f7;
+  border: 2px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease; /* Transición suave al pulsar */
+}
+
+/* Estado ACTIVO: Indica qué opción está seleccionada */
+button.activo {
+  background-color: #3182ce; /* Azul vivo */
+  color: white;
+  border-color: #2b6cb0;
+  box-shadow: 0 4px 6px rgba(49, 130, 206, 0.3);
+}
+
+/* 4. ESCENARIO DEL MAPA CENTRAL */
+#escenario-mapa {
+  flex: 1; /* Absorbe todo el espacio vertical disponible */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #ebf8ff; /* Fondo suave tono agua */
+}
+
+#contenedor-visor-mapa {
+  width: 90%;
+  max-width: 900px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#imagen-mapa-espana {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Ajusta la imagen sin deformarla */
+}
+
+/* 5. PIZARRA DE PUNTUACIÓN Y RETOS (PIE) */
+#pizarra-estado {
+  background-color: #2d3748;
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+/* Reglas especiales de estado pedagógico */
+.texto-acierto {
+  color: #48bb78; /* Verde para aciertos */
+  font-weight: bold;
+}
+
+.texto-error {
+  color: #f56565; /* Rojo para errores */
+  font-weight: bold;
+}
+
+/* ==========================================
+   FEEDBACK VISUAL PARA PROVINCIAS EN EL SVG
+   ========================================== */
+
+/* Estado normal de las provincias */
+#capa-provincias rect {
+  transition: fill 0.2s ease, stroke-width 0.2s ease;
+  cursor: pointer; /* Cambia el cursor a la mano interactiva */
+}
+
+/* Estado HOVER: Cuando el alumno pasa el dedo o ratón por encima */
+#capa-provincias rect:hover {
+  fill: #ecc94b !important; /* Amarillo interactivo */
+  stroke: #2b6cb0;
+  stroke-width: 3px;
+}
+
+/* Clases dinámicas de resultado */
+.provincia-acierto {
+  fill: #48bb78 !important; /* Verde acierto */
+}
+
+.provincia-error {
+  fill: #f56565 !important; /* Rojo error */
+}
+
+.provincia-pista {
+  fill: #ed8936 !important; /* Naranja aviso/pista */
+}
+
+/* ==========================================
+   OPTIMIZACIÓN TIPOGRÁFICA Y LEGIBILIDAD SVG
+   ========================================== */
+
+/* Regla maestra para todos los textos dentro del mapa SVG */
+#capa-provincias text {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 700; /* Letra seminegrita para mayor definición */
+  fill: #1a202c;    /* Color del cuerpo de la letra (gris oscuro/negro) */
+  
+  /* Centrado geométrico automático en el punto de coordenadas */
+  text-anchor: middle;
+  dominant-baseline: central;
+  
+  /* Desactivación de interferencia táctil */
+  pointer-events: none; /* El clic atraviesa el texto hacia la provincia */
+  
+  /* Halo blanco de legibilidad y contraste */
+  stroke: #ffffff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke fill; /* Dibuja el borde BLANCO DETRÁS del relleno negro */
+  
+  /* Suavizado visual */
+  user-select: none; /* Evita que el alumno seleccione el texto como si fuera un PDF */
+}
+
+/* Reglas de tamaño adaptativo según la categoría */
+.texto-provincia-destacada {
+  font-size: 14px !important;
+  fill: #2b6cb0 !important; /* Azul cobalto */
+}
+
+.texto-provincia-pequeña {
+  font-size: 11px !important;
+}
+
+/* ==========================================
+   ESTILOS DE CAPA: COMUNIDADES VS PROVINCIAS
+   ========================================== */
+
+/* 1. MODO PROVINCIAS (Normal): Fronteras blancas sólidas y limpias */
+#capa-provincias path,
+#capa-provincias rect {
+  fill: #f8fafc !important;        /* Tono base provincial */
+  stroke: #cbd5e1 !important;      /* Fronteras entre provincias */
+  stroke-width: 1px !important;
+  cursor: pointer;
+  transition: fill 0.2s ease;
+}
+
+/* Efecto al pasar el cursor (Hover) */
+#capa-provincias path:hover,
+#capa-provincias rect:hover {
+  fill: #e2e8f0 !important;
+}
+
+
+/* 2. MODO COMUNIDADES ACTIVO: Fronteras internas punteadas en gris oscuro */
+.modo-comunidades #capa-provincias path,
+.modo-comunidades #capa-provincias rect {
+  stroke: #2b6cb0 !important;        /* Borde azul oscuro marcando subdivisiones */
+  stroke-width: 2.5px !important;
+  stroke-dasharray: 5 4 !important;   /* Punteado bien visible y grueso */
+}
+
+/* Regla de ocultamiento universal para capas SVG */
+.capa-oculta {
+  display: none !important;
+  pointer-events: none !important; /* Desactiva la colisión táctil */
+}
+
+/* Estilo para los botones de tema superior */
+.btn-tema.activo {
+  background-color: #dd6b20 !important; /* Naranja activo bien visible */
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+#selector-tema-global {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  background-color: #1a202c;
+  padding: 10px;
+}
+
+.btn-tema {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  border: 1px solid #4a5568;
+}
+
+.btn-tema.activo {
+  background-color: #dd6b20; /* Naranja llamativo para el tema activo */
+  color: white;
+  border-color: #c05621;
+}
+
+/* Garantiza que los textos físicos se oculten con su capa y no interfieran al hacer clic */
+#capa-fisico text,
+.texto-fisico {
+  fill: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+  text-anchor: middle;
+  pointer-events: none; /* El clic atraviesa el texto hacia el elemento */
+}
+
+/* ==========================================================
+   1. MODO FÍSICO: SILUETA CONTINENTAL CONTINUA
+   ========================================================== */
+
+/* Oculta los nombres de las 50 provincias cuando estamos en Mapa Físico */
+.modo-fisico-activo #capa-provincias text,
+.modo-fisico-activo .texto-provincia {
+  display: none !important;
+}
+
+/* Suaviza los bordes y aplica un tono de tierra neutro y limpio */
+.modo-fisico-activo #capa-provincias path {
+  fill: #eef2f7 !important;     /* Tono tierra/continente neutro */
+  stroke: #cbd5e1 !important;   /* Fronteras provinciales muy suaves */
+  stroke-width: 0.8px !important;
+}
+
+/* ==========================================================
+   2. EFECTO HALO DE MÁXIMA NITIDEZ PARA RÓTULOS FÍSICOS
+   ========================================================== */
+
+/* Regla maestra para rótulos de ríos y montañas */
+#capa-fisico text,
+.texto-fisico {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  fill: #0f172a !important;        /* Color de texto carbón oscuro nítido */
+  
+  /* HALO BLANCO: Dibuja el contorno ANTES del relleno de la letra */
+  paint-order: stroke fill !important;
+  stroke: #ffffff !important;      /* Contorno de contraste blanco brillante */
+  stroke-width: 3.5px !important;  /* Ancho del halo de perfilado */
+  stroke-linejoin: round !important;
+  
+  text-anchor: middle;
+  pointer-events: none;            /* El clic del alumno atraviesa el texto */
+}
+
+/* Rótulos específicos de Ríos (Azul Marino Profundo e Itálica) */
+#capa-rios text {
+  fill: #1e3a8a !important;
+  font-size: 10.5px;
+  font-style: italic;
+}
+
+/* Rótulos específicos de Relieve (Marrón Montaña Nítido) */
+#capa-relieve text {
+  fill: #78350f !important;
+  font-size: 11px;
+}
+
+/* ==========================================================
+   1. REGULARES DE COLOR Y TRAZO PARA ESPAÑA FÍSICO
+   ========================================================== */
+
+/* Asegura el ocultamiento total de capas políticas en Mapa Físico */
+#capa-provincias.capa-oculta {
+  display: none !important;
+}
+
+/* RÍOS: Pigmento de trazo azul intenso y sin relleno interior */
+#capa-rios path {
+  stroke: #2b6cb0 !important;       /* Azul río intenso */
+  stroke-width: 5px !important;     /* Grosor de línea táctil */
+  stroke-linecap: round !important; /* Extremos redondeados */
+  fill: none !important;            /* Sin relleno interior */
+  cursor: pointer;
+}
+
+/* RELIEVE: Relleno ocre/marrón montaña con borde definido */
+#capa-relieve path {
+  fill: #b7791f !important;         /* Ocre montaña */
+  stroke: #78350f !important;       /* Borde marrón oscuro */
+  stroke-width: 1.5px !important;
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+/* RÓTULOS FÍSICOS: Nitidez con contorno de contraste */
+#capa-fisico text,
+.texto-fisico {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  fill: #0f172a !important;          /* Texto carbón oscuro */
+  paint-order: stroke fill !important;
+  stroke: #ffffff !important;        /* Halo blanco alrededor */
+  stroke-width: 3px !important;
+  pointer-events: none;
+}
+
+/* ==========================================================
+   CLASES DE ILUMINACIÓN DENTRO DE EVALUACIÓN
+   ========================================================== */
+
+/* Verde Acierto (1º o 2º intento) */
+.estado-acierto,
+path.estado-acierto,
+rect.estado-acierto {
+  fill: #48bb78 !important;
+  stroke: #22543d !important;
+  stroke-width: 2px !important;
+}
+
+/* Naranja Advertencia / Pista (1º fallo) */
+.estado-advertencia,
+path.estado-advertencia,
+rect.estado-advertencia {
+  fill: #ed8936 !important;
+  stroke: #7b341e !important;
+  stroke-width: 2px !important;
+}
+
+/* Rojo Fallo Agotado (2º fallo) */
+.estado-error,
+path.estado-error,
+rect.estado-error {
+  fill: #e53e3e !important;
+  stroke: #742a2a !important;
+  stroke-width: 2px !important;
+}
+
+.modo-cuestionario-activo text,
+.modo-cuestionario-activo .texto-fisico {
+  display: none !important;
+}
+
+/* ==========================================================
+   ACABADO Y SUAVIZADO CARTOGRÁFICO PROFESIONAL
+   ========================================================== */
+
+/* 1. Renderizado suavizado de bordes gráficos (evita dientes de sierra) */
+svg path {
+  shape-rendering: geometricPrecision;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+/* 2. Resaltado flotante al pasar el puntero (Hover educativo) */
+svg path:hover {
+  filter: brightness(0.95);
+  stroke-width: 2px !important;
+}
+
+/* ==========================================================
+   AJUSTES CRÍTICOS PARA EL CONTENEDOR DEL MAPA SIG (LEAFLET)
+   ========================================================== */
+
+#escenario-mapa {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #ebf8ff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#mapa-sig {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 450px; /* Garantiza visibilidad incluso si el flex falla temporalmente */
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================
+   ESTILOS PARA LOS MARCADORES INTERACTIVOS FÍSICOS (OPCIÓN B)
+   ========================================================== */
+.pin-educativo {
+  background: white;
+  border: 2px solid #2b6cb0;
+  border-radius: 50%;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.pin-educativo:hover {
+  transform: scale(1.25);
+  background-color: #ebf8ff;
+  border-color: #3182ce;
+  z-index: 1000 !important;
+}
+
+/* Variaciones de color según la categoría geográfica */
+.pin-rio { border-color: #2b6cb0; color: #2b6cb0; }
+.pin-relieve { border-color: #78350f; color: #78350f; }
+.pin-mar { border-color: #3182ce; color: #3182ce; }
+.pin-isla { border-color: #22543d; color: #22543d; }

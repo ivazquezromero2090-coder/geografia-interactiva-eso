@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Geografía Interactiva - SIG</title>
+  
+  <!-- 1. HOJA DE ESTILOS DE LEAFLET (OBLIGATORIA) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- 2. TU ARCHIVO CSS PERSONALIZADO -->
+  <link rel="stylesheet" href="estilos.css">
+</head>  
+<body>
+
+  <!-- BLOQUE 1: Encabezado -->
+  <header id="encabezado-app">
+    <h1>🌍 Geografía 3º ESO: España Político</h1>
+    <button id="btn-volver">◀️ Menú Principal</button>
+  </header>
+
+  <!-- ========================================================== -->
+<!-- BARRA PRINCIPAL DE SELECCIÓN DE MAPA (ESPAÑA VS. EUROPA) -->
+<!-- ========================================================== -->
+<div id="barra-selector-mapa" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 12px;">
+  <button id="btn-mapa-espana" class="btn-mapa activo" style="padding: 8px 16px; font-weight: bold; border-radius: 8px; cursor: pointer;">
+    🇪🇸 España
+  </button>
+
+  <button id="btn-mapa-europa" class="btn-mapa" style="padding: 8px 16px; font-weight: bold; border-radius: 8px; cursor: pointer;">
+    🇪🇺 Europa Físico
+  </button>
+
+  <button id="btn-mapa-mundo" class="btn-mapa" style="padding: 8px 16px; font-weight: bold; border-radius: 8px; cursor: pointer;">
+  🌍 Mapamundi
+  </button>
+</div>
+  
+  <!-- 1. BARRA SUPERIOR DE TEMA GLOBAL -->
+<div id="selector-tema-global">
+  <button id="btn-tema-politico" class="btn-tema activo">🏛️ España Político</button>
+  <button id="btn-tema-fisico" class="btn-tema">🏔️ España Físico</button>
+</div>
+
+<!-- 2. PANEL DE CONTROL DE CAPAS -->
+<section id="panel-control">
+  <!-- GRUPO MODOS DE JUEGO (SIEMPRE VISIBLE) -->
+  <div class="grupo-selector">
+    <label>Modo de juego:</label>
+    <button id="btn-modo-explorar" class="activo">🔍 Explorar</button>
+    <button id="btn-modo-cuestionario">🎯 Cuestionario</button>
+  </div>
+
+  <!-- GRUPO CAPAS POLÍTICAS (SOLO VISIBLE EN POLÍTICO) -->
+  <div id="grupo-capas-politicas" class="grupo-selector">
+    <label>Ver capas:</label>
+    <button id="btn-capa-comunidades">Comunidades Autónomas</button>
+    <button id="btn-capa-provincias" class="activo">50 Provincias</button>
+  </div>
+  
+</section>
+
+   <!-- BLOQUE 3: Escenario Principal del Mapa -->
+ <main id="escenario-mapa">
+  <!-- Contenedor donde Leaflet inyectará el mapa SIG interactivo -->
+  <div id="mapa-sig" style="width: 100%; height: 100%; border-radius: 12px;"></div>
+  </main>
+
+  <!-- BLOQUE 4: Pizarra de Puntuación y Retos -->
+  <footer id="pizarra-estado">
+    <div id="panel-instruccion">
+      <p id="texto-reto">Selecciona un elemento en el mapa para explorar o inicia el cuestionario.</p>
+    </div>
+    <div id="panel-marcador">
+      <span>Aciertos: <strong id="val-aciertos">0</strong>/10</span> | 
+      <span>Puntuación: <strong id="val-puntos">0.0</strong> pts</span>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
