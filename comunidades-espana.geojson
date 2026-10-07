@@ -571,7 +571,7 @@
       "properties": {
         "cod_ccaa": "07",
         "noml_ccaa": "COMUNIDAD DE CASTILLA Y LEON",
-        "name": "Castilla-Leon",
+        "name": "Castilla y León",
         "cartodb_id": 7,
         "created_at": "2014-09-30T00:00:00Z",
         "updated_at": "2014-12-25T02:07:41Z"
@@ -20041,7 +20041,7 @@
       "properties": {
         "cod_ccaa": "01",
         "noml_ccaa": "COMUNIDAD AUTONOMA DE ANDALUCIA",
-        "name": "Andalucia",
+        "name": "Andalucía",
         "cartodb_id": 1,
         "created_at": "2014-09-30T00:00:00Z",
         "updated_at": "2014-12-25T02:07:41Z"
@@ -43599,7 +43599,7 @@
       "properties": {
         "cod_ccaa": "02",
         "noml_ccaa": "COMUNIDAD AUTONOMA DE ARAGON",
-        "name": "Aragon",
+        "name": "Aragón",
         "cartodb_id": 2,
         "created_at": "2014-09-30T00:00:00Z",
         "updated_at": "2014-12-25T02:07:41Z"
@@ -44428,7 +44428,7 @@
       "properties": {
         "cod_ccaa": "08",
         "noml_ccaa": "COMUNIDAD AUTONOMA DE CASTILLA-LA MANCHA",
-        "name": "Castilla-La Mancha",
+        "name": "Castilla La Mancha",
         "cartodb_id": 6,
         "created_at": "2014-09-30T00:00:00Z",
         "updated_at": "2014-12-25T02:07:41Z"
