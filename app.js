@@ -435,7 +435,7 @@ function prepararSiguientePregunta() {
   }
 
   numeroPreguntaActual++;
-  provinciaObjetivo = mazoPreguntasPendientes.pop(); // Aquí se extrae la Comunidad o Provincia objetivo
+  provinciaObjetivo = mazoPreguntasPendientes.pop(); // Extraemos el elemento del mazo
 
   actualizarMarcadorEnPantalla();
 
@@ -443,12 +443,22 @@ function prepararSiguientePregunta() {
   if (dom.textoReto) {
     let prefijoMapa = (mapaActivo === "europa") ? "🇪🇺 EUROPA" : ((mapaActivo === "mundo") ? "🌍 MAPAMUNDI" : "🇪🇸 ESPAÑA");
     
-    // Validamos explícitamente el texto del reto según la capa activa
+    // Determinamos el texto descriptivo según el mapa y el tema activo
     let tipoPreguntaTexto = "la provincia";
-    if (mapaActivo === "espana" && temaActivo === "politico" && capaActiva === "comunidades") {
-      tipoPreguntaTexto = "la Comunidad Autónoma";
-    } else if (mapaActivo !== "espana" || temaActivo === "fisico") {
-      tipoPreguntaTexto = "el elemento";
+    
+    if (mapaActivo === "espana") {
+      if (temaActivo === "politico") {
+        if (capaActiva === "comunidades") {
+          tipoPreguntaTexto = "la Comunidad Autónoma";
+        } else {
+          tipoPreguntaTexto = "la provincia";
+        }
+      } else {
+        // Tema físico en España: distinguimos si es río o relieve basándonos en si está en el diccionario de ríos o usando un emoji adecuado
+        tipoPreguntaTexto = "el elemento físico (río o relieve)";
+      }
+    } else {
+      tipoPreguntaTexto = "el elemento geográfico";
     }
     
     dom.textoReto.textContent = "🎯 " + prefijoMapa + " (" + numeroPreguntaActual + "/" + TOTAL_PREGUNTAS_RONDA + "): Localiza " + tipoPreguntaTexto + ": " + provinciaObjetivo;
