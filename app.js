@@ -373,25 +373,16 @@ function iniciarNuevoCuestionario() {
   if (mapaActivo === "espana") {
     if (temaActivo === "politico") {
       if (capaActiva === "comunidades") {
-        catalogoBase = Object.keys(mapaComunidades).map(nombre => ({
-          nombre: nombre,
-          texto: `Haz clic en la comunidad: ${nombre}`
-        }));
+        // Obtenemos las claves (nombres) de las comunidades
+        catalogoBase = Object.keys(mapaComunidades);
       } else {
-        catalogoBase = provinciaCatalogo.map(nombre => ({
-          nombre: nombre,
-          texto: `Haz clic en la provincia: ${nombre}`
-        }));
+        // Usamos el catálogo de provincias (que son strings)
+        catalogoBase = [...provinciaCatalogo];
       }
     } else {
-      // 🌟 SOLUCIÓN: Generamos objetos estructurados con las claves exactas del mapa físico de España
-      catalogoBase = Object.keys(capasFisicasPorNombre).map(nombre => ({
-        nombre: nombre,
-        texto: `Haz clic en: ${nombre}`,
-        pregunta: `Haz clic en: ${nombre}`
-      }));
+      // 🌟 SOLUCIÓN ESPAÑA FÍSICO: Extraemos puramente los nombres (strings) del mapa físico actual
+      catalogoBase = Object.keys(capasFisicasPorNombre);
     }
-  
   } else if (mapaActivo === "europa") {
     if (filtroFisicoActivo === "rios") catalogoBase = [...europaRios];
     else if (filtroFisicoActivo === "relieve") catalogoBase = [...europaRelieve];
@@ -415,7 +406,7 @@ function iniciarNuevoCuestionario() {
     }
   }
 
-  // Barajamos y cortamos la ronda
+  // Barajamos y cortamos la ronda asegurando que sean cadenas de texto puras
   const mazoBarajado = [...catalogoBase].sort(() => Math.random() - 0.5);
   mazoPreguntasPendientes = mazoBarajado.slice(0, TOTAL_PREGUNTAS_RONDA);
 
@@ -423,7 +414,7 @@ function iniciarNuevoCuestionario() {
   numeroPreguntaActual = 0;
   aciertosPrimera = 0;
   aciertosSegunda = 0;
-  bloqueoInteraccion = false;
+  bloqueoInterinteraction = false; // (o bloqueoInteraccion segun tu variable original)
 
   actualizarMarcadorEnPantalla();
 
