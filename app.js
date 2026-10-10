@@ -1253,21 +1253,41 @@ function cargarCapasSegunEstado() {
 }
 
 function limpiarColoresMapa() {
-  // Limpiar capas políticas GeoJSON
+  // 1. Limpiar capas políticas GeoJSON
   if (capaGeoJsonActual) {
     capaGeoJsonActual.eachLayer(layer => {
       layer.options.isAcierto = false;
-      capaGeoJsonActual.resetStyle(layer);
+      if (typeof layer.setStyle === 'function') {
+        capaGeoJsonActual.resetStyle(layer);
+      }
     });
   }
-  // Limpiar capas físicas
+
+  // 2. Limpiar capas físicas de España de forma segura para L.Marker y vectores
   for (let nombre in capasFisicasPorNombre) {
     let layer = capasFisicasPorNombre[nombre];
     if (layer) {
-      if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
-        layer.setStyle({ color: '#2b6cb0', weight: 5, opacity: 0.85 });
-      } else {
-        layer.setStyle({ fillColor: '#b7791f', color: '#78350f', fillOpacity: 0.65, weight: 1.5 });
+      if (layer instanceof L.Marker) {
+        // Si es una chincheta, restauramos su icono predeterminado original (💧 o ⛰️)
+        let esRio = nombre.match(/Miño|Eo|Navia|Nalón|Nervión|Bidasoa|Ter|Llobregat|Ebro|Turia|Júcar|Segura|Almanzora|Guadalhorce|Guadalete|Guadalquivir|Tinto|Odiel|Guadiana|Tajo|Duero/);
+        let clasePin = esRio ? "pin-educativo pin-rio" : "pin-educativo pin-relieve";
+        let iconoSimbolo = esRio ? "💧" : "⛰️";
+
+        let customIcon = L.divIcon({
+          className: clasePin,
+          html: `<span>${iconoSimbolo}</span>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
+        layer.setIcon(customIcon);
+
+      } else if (typeof layer.setStyle === 'function') {
+        // Si por algún motivo hubiera un elemento vectorial clásico
+        if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
+          layer.setStyle({ color: '#2b6cb0', weight: 5, opacity: 0.85 });
+        } else {
+          layer.setStyle({ fillColor: '#b7791f', color: '#78350f', fillOpacity: 0.65, weight: 1.5 });
+        }
       }
     }
   }
