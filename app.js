@@ -222,32 +222,46 @@ function seleccionarMapa(nuevoMapa) {
 // 5. FUNCIONES DE LIMPIEZA Y PINTADO VISUAL DEL MAPA
 // ------------------------------------------------------------------------------
 function limpiarColoresMapa() {
-  // Selector universal: busca en España, Europa y Mapamundi (path, rect y text)
-  const todasLasFiguras = document.querySelectorAll(
-    "#mapa-svg path, #mapa-svg rect, " +
-    "#mapa-europa-svg path, #mapa-europa-svg rect, #mapa-europa-svg text, " +
-    "#mapa-mundo-svg path, #mapa-mundo-svg rect, #mapa-mundo-svg text"
-  );
+  // 1. Limpiar capas políticas GeoJSON
+  if (capaGeoJsonActual) {
+    capaGeoJsonActual.eachLayer(layer => {
+      layer.options.isAcierto = false;
+      if (typeof layer.setStyle === 'function') {
+        capaGeoJsonActual.resetStyle(layer);
+      }
+    });
+  }
 
-  todasLasFiguras.forEach(figura => {
-    // Protección de fondos y recuadros especiales
-    if (figura.id === "mar-fondo" || figura.id === "mar-europa-fondo" || figura.id === "mar-mundo-fondo") return;
-    if (figura.parentNode && figura.parentNode.id === "recuadro-canarias") return;
-    
-    // 1. Eliminación de clases CSS de estado
-    figura.classList.remove("estado-acierto", "estado-advertencia", "estado-error");
-    
-    // 2. Limpieza completa de estilos directos (relleno y bordes)
-    figura.style.removeProperty("fill");
-    figura.style.removeProperty("stroke");
-    figura.style.removeProperty("stroke-width");
-    figura.style.fill = "";
-    figura.style.stroke = "";
-  });
+  // 2. Limpiar capas físicas de España de forma segura
+  for (let nombre in capasFisicasPorNombre) {
+    let layer = capasFisicasPorNombre[nombre];
+    if (layer) {
+      // Verificamos si el elemento soporta estilos (evita el error con L.Marker)
+      if (typeof layer.setStyle === 'function') {
+        if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
+          layer.setStyle({ color: '#2b6cb0', weight: 5, opacity: 0.85 });
+        } else {
+          layer.setStyle({ fillColor: '#b7791f', color: '#78350f', fillOpacity: 0.65, weight: 1.5 });
+        }
+      }
+      // Si es un L.Marker (chincheta), no usa setStyle, por lo que se ignora sin romper la app.
+    }
+  }
 
-  // Si estamos en España Político en la pestaña Comunidades, repinta los colores regionales
-  if (mapaActivo === "espana" && temaActivo === "politico" && capaActiva === "comunidades") {
-    pintarMapaPorComunidades();
+  // 3. Limpiar capas físicas de Europa (si procede)
+  for (let nombre in capasEuropaFisicasPorNombre) {
+    let layer = capasEuropaFisicasPorNombre[nombre];
+    if (layer && typeof layer.setStyle === 'function') {
+      layer.setStyle({ color: '#2b6cb0', weight: 4 });
+    }
+  }
+
+  // 4. Limpiar capas físicas del Mapamundi (si procede)
+  for (let nombre in capasMundoFisicasPorNombre) {
+    let layer = capasMundoFisicasPorNombre[nombre];
+    if (layer && typeof layer.setStyle === 'function') {
+      layer.setStyle({ color: '#2b6cb0', weight: 4 });
+    }
   }
 }
 
