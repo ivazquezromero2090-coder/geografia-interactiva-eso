@@ -379,9 +379,7 @@ function iniciarNuevoCuestionario() {
         catalogoBase = [...provinciaCatalogo];
       }
     } else {
-      if (filtroFisicoActivo === "rios") catalogoBase = [...riosCatalogo];
-      else if (filtroFisicoActivo === "relieve") catalogoBase = [...relieveCatalogo];
-      else catalogoBase = [...riosCatalogo, ...relieveCatalogo];
+      catalogoBase = Object.keys(capasFisicasPorNombre);
     }
   } else if (mapaActivo === "europa") {
     if (filtroFisicoActivo === "rios") catalogoBase = [...europaRios];
