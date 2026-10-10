@@ -893,13 +893,10 @@ function inicializarMapaSIG() {
 // Almacén temporal para las entidades físicas de Leaflet
 let capasFisicasPorNombre = {};
 let grupoCapasFisicasLeaflet = null;
-let grupoCapasEuropaLeaflet = null;        // <--- Añadida aquí arriba
+let grupoCapasEuropaLeaflet = null;        
 let capasEuropaFisicasPorNombre = {};
 let grupoCapasMundoLeaflet = null;
 let capasMundoFisicasPorNombre = {};
-
-
-let nombreElemento = diccionarioCorrecciones[normalizarTextoGeografico(nombreCrudo)] || nombreCrudo;
 
 function cargarCapasFisicasEspana() {
   if (!mapaSIG) return;
@@ -946,7 +943,6 @@ function cargarCapasFisicasEspana() {
   };
 
   for (let nombreElemento in espanaFisicaPuntos) {
-    // Patrón actualizado para detectar todos los ríos de la lista como líneas/gotas de agua
     let esRio = nombreElemento.match(/Miño|Eo|Navia|Nalón|Nervión|Bidasoa|Ter|Llobregat|Ebro|Turia|Júcar|Segura|Almanzora|Guadalhorce|Guadalete|Guadalquivir|Tinto|Odiel|Guadiana|Tajo|Duero/);
     
     let clasePin = esRio ? "pin-educativo pin-rio" : "pin-educativo pin-relieve";
