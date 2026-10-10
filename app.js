@@ -373,14 +373,25 @@ function iniciarNuevoCuestionario() {
   if (mapaActivo === "espana") {
     if (temaActivo === "politico") {
       if (capaActiva === "comunidades") {
-        // Obtenemos directamente las claves de las comunidades autónomas
-        catalogoBase = Object.keys(mapaComunidades);
+        catalogoBase = Object.keys(mapaComunidades).map(nombre => ({
+          nombre: nombre,
+          texto: `Haz clic en la comunidad: ${nombre}`
+        }));
       } else {
-        catalogoBase = [...provinciaCatalogo];
+        catalogoBase = provinciaCatalogo.map(nombre => ({
+          nombre: nombre,
+          texto: `Haz clic en la provincia: ${nombre}`
+        }));
       }
     } else {
-      catalogoBase = Object.keys(capasFisicasPorNombre);
+      // 🌟 SOLUCIÓN: Generamos objetos estructurados con las claves exactas del mapa físico de España
+      catalogoBase = Object.keys(capasFisicasPorNombre).map(nombre => ({
+        nombre: nombre,
+        texto: `Haz clic en: ${nombre}`,
+        pregunta: `Haz clic en: ${nombre}`
+      }));
     }
+  
   } else if (mapaActivo === "europa") {
     if (filtroFisicoActivo === "rios") catalogoBase = [...europaRios];
     else if (filtroFisicoActivo === "relieve") catalogoBase = [...europaRelieve];
