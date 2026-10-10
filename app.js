@@ -513,9 +513,12 @@ function procesarRespuestaAlumno(elementoPulsado) {
 
   if (mapaActivo === "espana" && temaActivo === "politico" && capaActiva === "comunidades") {
     let comunidadDelPulsado = diccionarioInversoComunidades[elementoPulsado] || diccionarioInversoComunidades[diccionarioIslas[elementoPulsado]];
-    esAcierto = (comunidadDelPulsado === provinciaObjetivo);
+    
+    // Comparamos usando normalización para evitar fallos por tildes o mayúsculas
+    esAcierto = (normalizarTextoGeografico(comunidadDelPulsado) === normalizarTextoGeografico(provinciaObjetivo));
   } else {
-    esAcierto = (elementoPulsado === provinciaObjetivo) || (diccionarioIslas[elementoPulsado] === provinciaObjetivo);
+    esAcierto = (normalizarTextoGeografico(elementoPulsado) === normalizarTextoGeografico(provinciaObjetivo)) || 
+                (normalizarTextoGeografico(diccionarioIslas[elementoPulsado]) === normalizarTextoGeografico(provinciaObjetivo));
   }
 
   const elementoGrafico = document.getElementById(elementoPulsado);
