@@ -226,29 +226,25 @@ function limpiarColoresMapa() {
   if (capaGeoJsonActual) {
     capaGeoJsonActual.eachLayer(layer => {
       layer.options.isAcierto = false;
-      if (typeof layer.setStyle === 'function') {
+      if (layer && typeof layer.setStyle === 'function') {
         capaGeoJsonActual.resetStyle(layer);
       }
     });
   }
 
-  // 2. Limpiar capas físicas de España de forma segura
+  // 2. Limpiar capas físicas de España (Seguro para markers y líneas)
   for (let nombre in capasFisicasPorNombre) {
     let layer = capasFisicasPorNombre[nombre];
-    if (layer) {
-      // Verificamos si el elemento soporta estilos (evita el error con L.Marker)
-      if (typeof layer.setStyle === 'function') {
-        if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
-          layer.setStyle({ color: '#2b6cb0', weight: 5, opacity: 0.85 });
-        } else {
-          layer.setStyle({ fillColor: '#b7791f', color: '#78350f', fillOpacity: 0.65, weight: 1.5 });
-        }
+    if (layer && typeof layer.setStyle === 'function') {
+      if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
+        layer.setStyle({ color: '#2b6cb0', weight: 5, opacity: 0.85 });
+      } else {
+        layer.setStyle({ fillColor: '#b7791f', color: '#78350f', fillOpacity: 0.65, weight: 1.5 });
       }
-      // Si es un L.Marker (chincheta), no usa setStyle, por lo que se ignora sin romper la app.
     }
   }
 
-  // 3. Limpiar capas físicas de Europa (si procede)
+  // 3. Limpiar capas físicas de Europa (Protegido por si son L.marker)
   for (let nombre in capasEuropaFisicasPorNombre) {
     let layer = capasEuropaFisicasPorNombre[nombre];
     if (layer && typeof layer.setStyle === 'function') {
@@ -256,7 +252,7 @@ function limpiarColoresMapa() {
     }
   }
 
-  // 4. Limpiar capas físicas del Mapamundi (si procede)
+  // 4. Limpiar capas físicas del Mapamundi (Protegido por si son L.marker)
   for (let nombre in capasMundoFisicasPorNombre) {
     let layer = capasMundoFisicasPorNombre[nombre];
     if (layer && typeof layer.setStyle === 'function') {
