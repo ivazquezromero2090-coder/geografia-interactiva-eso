@@ -898,18 +898,6 @@ let capasEuropaFisicasPorNombre = {};
 let grupoCapasMundoLeaflet = null;
 let capasMundoFisicasPorNombre = {};
 
-// Ejemplo de cómo procesar el nombre dentro del bucle del GeoJSON:
-let nombreCrudo = feature.properties.nombre || feature.properties.name || feature.properties.noml_ccaa;
-let nombreLimpio = nombreCrudo; // O un mapeo directo si difiere mucho (ej: "COMUNIDAD AUTONOMA DE LA RIOJA" -> "La Rioja")
-
-// Diccionario de equivalencias rápidas si el GeoJSON trae nombres largos o institucionales:
-const diccionarioCorrecciones = {
-  "comunidad de castilla y leon": "Castilla y León",
-  "comunidad autonoma de cataluña": "Cataluña",
-  "comunidad autonoma de la rioja": "La Rioja",
-  "comunidad autonoma de las illes balears": "Baleares",
-  "comunidad autonoma de la region de murcia": "Murcia"
-};
 
 let nombreElemento = diccionarioCorrecciones[normalizarTextoGeografico(nombreCrudo)] || nombreCrudo;
 
