@@ -355,6 +355,15 @@ function cambiarModoJuego(nuevoModo) {
   }
 }
 
+function normalizarTextoGeografico(texto) {
+  if (!texto) return "";
+  return texto
+    .toLowerCase()
+    .normalize("NFD") // Separa las tildes de las letras
+    .replace(/[\u0300-\u036f]/g, "") // Elimina las tildes
+    .trim();
+}
+
 // ------------------------------------------------------------------------------
 // 8. GENERADOR DE CUESTIONARIO ADAPTATIVO POR MAPA
 // ------------------------------------------------------------------------------
@@ -889,6 +898,21 @@ let capasEuropaFisicasPorNombre = {};
 let grupoCapasMundoLeaflet = null;
 let capasMundoFisicasPorNombre = {};
 
+// Ejemplo de cómo procesar el nombre dentro del bucle del GeoJSON:
+let nombreCrudo = feature.properties.nombre || feature.properties.name || feature.properties.noml_ccaa;
+let nombreLimpio = nombreCrudo; // O un mapeo directo si difiere mucho (ej: "COMUNIDAD AUTONOMA DE LA RIOJA" -> "La Rioja")
+
+// Diccionario de equivalencias rápidas si el GeoJSON trae nombres largos o institucionales:
+const diccionarioCorrecciones = {
+  "comunidad de castilla y leon": "Castilla y León",
+  "comunidad autonoma de cataluña": "Cataluña",
+  "comunidad autonoma de la rioja": "La Rioja",
+  "comunidad autonoma de las illes balears": "Baleares",
+  "comunidad autonoma de la region de murcia": "Murcia"
+};
+
+let nombreElemento = diccionarioCorrecciones[normalizarTextoGeografico(nombreCrudo)] || nombreCrudo;
+
 function cargarCapasFisicasEspana() {
   if (!mapaSIG) return;
 
@@ -901,14 +925,30 @@ function cargarCapasFisicasEspana() {
   grupoCapasFisicasLeaflet = L.layerGroup().addTo(mapaSIG);
 
   const espanaFisicaPuntos = {
+    // --- RÍOS DE ESPAÑA (Catálogo Completo) ---
     "Miño": [42.30, -8.00],
-    "Duero": [41.50, -4.72],
-    "Tajo": [39.85, -4.02],
-    "Guadiana": [38.88, -6.97],
-    "Guadalquivir": [37.38, -5.98],
+    "Eo": [43.50, -7.03],
+    "Navia": [43.54, -6.72],
+    "Nalón": [43.56, -6.04],
+    "Nervión": [43.26, -2.93],
+    "Bidasoa": [43.33, -1.78],
+    "Ter": [42.00, 2.82],
+    "Llobregat": [41.32, 2.13],
     "Ebro": [41.65, -0.88],
+    "Turia": [39.46, -0.33],
     "Júcar": [39.30, -0.32],
     "Segura": [38.08, -0.68],
+    "Almanzora": [37.32, -1.82],
+    "Guadalhorce": [36.67, -4.45],
+    "Guadalete": [36.60, -6.23],
+    "Guadalquivir": [37.38, -5.98],
+    "Tinto": [37.22, -6.92],
+    "Odiel": [37.26, -6.95],
+    "Guadiana": [38.88, -6.97],
+    "Tajo": [39.85, -4.02],
+    "Duero": [41.50, -4.72],
+
+    // --- RELIEVE / CORDILLERAS ---
     "Cordillera Cantábrica": [43.10, -5.00],
     "Pirineos": [42.60, 0.80],
     "Sistema Ibérico": [40.80, -2.00],
@@ -918,7 +958,9 @@ function cargarCapasFisicasEspana() {
   };
 
   for (let nombreElemento in espanaFisicaPuntos) {
-    let esRio = nombreElemento.match(/Miño|Duero|Tajo|Guadiana|Guadalquivir|Ebro|Júcar|Segura/);
+    // Patrón actualizado para detectar todos los ríos de la lista como líneas/gotas de agua
+    let esRio = nombreElemento.match(/Miño|Eo|Navia|Nalón|Nervión|Bidasoa|Ter|Llobregat|Ebro|Turia|Júcar|Segura|Almanzora|Guadalhorce|Guadalete|Guadalquivir|Tinto|Odiel|Guadiana|Tajo|Duero/);
+    
     let clasePin = esRio ? "pin-educativo pin-rio" : "pin-educativo pin-relieve";
     let iconoSimbolo = esRio ? "💧" : "⛰️";
 
@@ -930,7 +972,11 @@ function cargarCapasFisicasEspana() {
     });
 
     let marker = L.marker(espanaFisicaPuntos[nombreElemento], { icon: customIcon });
-    marker.on('click', () => procesarRespuestaAlumno(nombreElemento));
+    
+    marker.on('click', () => {
+      procesarRespuestaAlumno(nombreElemento);
+    });
+
     grupoCapasFisicasLeaflet.addLayer(marker);
     capasFisicasPorNombre[nombreElemento] = marker;
   }
@@ -1251,9 +1297,10 @@ function pintarElementoLeaflet(nombre, colorHex, colorBorde) {
 }
 
 function obtenerLayerGrafico(nombre) {
-  return capasPorNombre[nombre] || capasFisicasPorNombre[nombre];
-  return capasPorNombre[nombre] || capasFisicasPorNombre[nombre] || capasEuropaFisicasPorNombre[nombre];
-  return capasPorNombre[nombre] || capasFisicasPorNombre[nombre] || capasEuropaFisicasPorNombre[nombre] || capasMundoFisicasPorNombre[nombre];
+  return capasPorNombre[nombre] || 
+         capasFisicasPorNombre[nombre] || 
+         capasEuropaFisicasPorNombre[nombre] || 
+         capasMundoFisicasPorNombre[nombre];
 }
 
 function inicializarApp() {
